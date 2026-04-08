@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cars List</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #74ebd5, #9face6);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        tr:hover {
+            background: #ddd;
+        }
+
+        .available {
+            color: green;
+            font-weight: bold;
+        }
+
+        .rented {
+            color: red;
+            font-weight: bold;
+        }
+
+        .maintenance {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 12px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back-btn:hover {
+            background: #2980b9;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <h2>🚗 Cars List</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Status</th>
+        </tr>
+
+        {% for car in cars %}
+        <tr>
+            <td>{{ car.car_id }}</td>
+            <td>{{ car.brand }}</td>
+            <td>{{ car.model }}</td>
+
+            <td>
+                {% if car.status == 'Available' %}
+                    <span class="available">Available</span>
+                {% elif car.status == 'Rented' %}
+                    <span class="rented">Rented</span>
+                {% else %}
+                    <span class="maintenance">Maintenance</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/" class="back-btn">⬅ Back</a>
+</div>
+
+</body>
+</html>

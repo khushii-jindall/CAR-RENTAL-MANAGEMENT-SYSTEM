@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rental Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #2c5364);
+            color: white;
+        }
+
+        .navbar {
+            text-align: center;
+            font-size: 30px;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 95%;
+            margin: auto;
+        }
+
+        .summary {
+            margin: 20px 0;
+            font-size: 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.4);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .search-box {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            padding: 8px;
+            width: 250px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            color: white;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .status.Ongoing { background: orange; }
+        .status.Completed { background: green; }
+
+        .bill-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white;
+            cursor: pointer;
+            margin: 3px;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin: 20px;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">📊 Rental Records</div>
+
+<div class="container">
+
+    <div class="summary">
+        <strong>Total Revenue:</strong> ₹{{ total_revenue_inr }}
+    </div>
+
+    <!-- 🔍 SEARCH -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search customer or car...">
+    </div>
+
+    <table id="rentalTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Car</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Days</th>
+                <th>Total (₹)</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% if rentals %}
+            {% for r in rentals %}
+            <tr>
+                <td>{{ r.rental_id }}</td>
+                <td>{{ r.name }}</td>
+                <td>{{ r.model }}</td>
+                <td>{{ r.start_date.strftime('%d-%b-%Y') }}</td>
+                <td>{{ r.end_date.strftime('%d-%b-%Y') }}</td>
+
+                <td>{{ ((r.end_date - r.start_date).days + 1) }}</td>
+
+                <td>₹{{ r.total_amount }}</td>
+
+                <td>
+                    <span class="status {{ r.status }}">
+                        {{ r.status }}
+                    </span>
+                </td>
+
+                <td>
+                    <!-- BILL -->
+                    <button class="bill-btn"
+                        onclick="printInvoice('{{r.rental_id}}','{{r.name}}','{{r.model}}','{{r.start_date}}','{{r.end_date}}','{{r.total_amount}}')">
+                        🧾 Bill
+                    </button>
+
+                    <!-- RETURN -->
+                    {% if r.status == 'Ongoing' %}
+                    <form method="POST" action="/return_car/{{r.rental_id}}" 
+                          onsubmit="return confirm('Confirm return?')">
+                        <input type="date" name="actual_return_date" required>
+                        <button type="submit" class="bill-btn">Return</button>
+                    </form>
+                    {% else %}
+                        ✔ Completed
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="9">No rental records found</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <a href="/" class="back">⬅ Back</a>
+</div>
+
+<div id="invoice" style="display:none;"></div>
+
+<script>
+// 🔍 SEARCH FUNCTION
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#rentalTable tbody tr");
+
+    rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(value) ? "" : "none";
+    });
+});
+
+// 🧾 PRINT INVOICE
+function printInvoice(id, name, car, start, end, amount) {
+    let invoice = document.getElementById("invoice");
+
+    invoice.innerHTML = `
+        <h2 style="text-align:center;">🚗 Car Rental Invoice</h2>
+        <hr>
+        <p><strong>ID:</strong> ${id}</p>
+        <p><strong>Customer:</strong> ${name}</p>
+        <p><strong>Car:</strong> ${car}</p>
+        <p><strong>From:</strong> ${start}</p>
+        <p><strong>To:</strong> ${end}</p>
+        <p><strong>Total:</strong> ₹${amount}</p>
+        <hr>
+        <p style="text-align:center;">Thank you 🙏</p>
+    `;
+
+    invoice.style.display = "block";
+    window.print();
+    invoice.style.display = "none";
+}
+</script>
+
+</body>
+</html>

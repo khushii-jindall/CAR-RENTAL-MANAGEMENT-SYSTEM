@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Car</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .navbar {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: slideDown 0.8s ease;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            width: 340px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            animation: zoomIn 0.8s ease;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 6px #fff;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #00c6ff;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0072ff;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .back {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes slideDown {
+            from {transform: translateY(-30px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+
+        @keyframes zoomIn {
+            from {transform: scale(0.8); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">🚗 Add New Car</div>
+
+<div class="container">
+    <form method="POST" action="/add_car" onsubmit="return validateForm()">
+
+        <div class="form-group">
+            <label>Car Model</label>
+            <input name="model" placeholder="e.g. Swift, Creta" required>
+        </div>
+
+        <div class="form-group">
+            <label>Brand</label>
+            <input name="brand" placeholder="e.g. Maruti, Hyundai" required>
+        </div>
+
+        <div class="form-group">
+            <label>Year</label>
+            <input type="number" name="year" min="2000" max="2026" required>
+        </div>
+
+        <div class="form-group">
+            <label>Price per day (₹)</label>
+            <input type="number" name="price_per_day" min="100" required>
+        </div>
+
+        <div class="form-group">
+            <label>Status</label>
+            <select name="status">
+                <option value="Available">Available</option>
+                <option value="Maintenance">Maintenance</option>
+            </select>
+        </div>
+
+        <button type="submit" id="submitBtn">Add Car</button>
+    </form>
+
+    <a href="/" class="back">⬅ Back</a>
+</div>
+
+<script>
+function validateForm() {
+    let year = document.querySelector("input[name='year']").value;
+    let price = document.querySelector("input[name='price_per_day']").value;
+
+    if (year < 2000 || year > 2026) {
+        alert("Enter valid year!");
+        return false;
+    }
+
+    if (price <= 0) {
+        alert("Price must be greater than 0!");
+        return false;
+    }
+
+    document.getElementById("submitBtn").innerText = "Adding...";
+    return true;
+}
+</script>
+
+</body>
+</html>

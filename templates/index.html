@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Rental Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            color: white;
+        }
+
+        .navbar {
+            text-align: center;
+            font-size: 32px;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            text-align: center;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            padding: 25px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            font-size: 20px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .alert {
+            padding: 10px;
+            margin: 10px auto;
+            width: 50%;
+            border-radius: 8px;
+        }
+
+        .alert.success {
+            background: #2ecc71;
+        }
+
+        .alert.error {
+            background: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">🚗 Car Rental Dashboard</div>
+
+<div class="container">
+
+    <!-- 🔔 FLASH MESSAGE -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, msg in messages %}
+            <div class="alert {{ category }}">{{ msg }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <h2>Welcome 👋</h2>
+
+    <!-- 📊 STATS (FIXED LINKS) -->
+    <div class="menu">
+
+        <a href="/view_cars">
+            <div class="card">🚘 Total Cars <br> {{ total_cars }}</div>
+        </a>
+
+        <a href="/available_cars">
+            <div class="card">✅ Available <br> {{ available_cars }}</div>
+        </a>
+
+        <a href="/view_customers">
+            <div class="card">👤 Customers <br> {{ total_customers }}</div>
+        </a>
+
+        <a href="/view_rentals">
+            <div class="card">💰 Revenue <br> ₹{{ revenue }}</div>
+        </a>
+
+    </div>
+
+    <!-- ⚡ ACTIONS -->
+    <div class="menu">
+
+        <a href="/add_customer">
+            <div class="card">👤 Add Customer</div>
+        </a>
+
+        <a href="/add_car">
+            <div class="card">🚘 Add Car</div>
+        </a>
+
+        <a href="/rent_car">
+            <div class="card">📅 Rent Car</div>
+        </a>
+
+        <a href="/view_rentals">
+            <div class="card">📊 View Rentals</div>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

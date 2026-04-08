@@ -1,0 +1,211 @@
+/* ===== GLOBAL ===== */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1f2c3e, #2c3e50);
+    color: #ecf0f1;
+    min-height: 100vh;
+    animation: fadeIn 0.8s ease-in;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    padding: 20px;
+    background: #0f172a;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+/* ===== CONTAINER (GLASS EFFECT) ===== */
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    color: white;
+    width: 420px;
+    margin: 60px auto;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+/* ===== MENU GRID ===== */
+.menu {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+/* ===== CARDS ===== */
+.card {
+    padding: 25px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 12px;
+    transition: 0.3s;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+.card:nth-child(1) {
+    background: linear-gradient(45deg, #ff6a00, #ee0979);
+}
+.card:nth-child(2) {
+    background: linear-gradient(45deg, #36d1dc, #5b86e5);
+}
+.card:nth-child(3) {
+    background: linear-gradient(45deg, #11998e, #38ef7d);
+}
+.card:nth-child(4) {
+    background: linear-gradient(45deg, #f7971e, #ffd200);
+    color: #2c3e50;
+}
+
+/* CARD HOVER */
+.card:hover {
+    transform: scale(1.08) translateY(-5px);
+    filter: brightness(1.2);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+}
+
+/* ===== FORM ===== */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* INPUTS */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    color: #2c3e50;
+}
+
+/* INPUT FOCUS EFFECT */
+input:focus, select:focus {
+    outline: none;
+    border: 2px solid #667eea;
+    box-shadow: 0 0 8px #667eea;
+}
+
+/* ===== BUTTON ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* ===== BACK LINK ===== */
+.back {
+    display: inline-block;
+    margin-top: 15px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* ===== TABLE ===== */
+table {
+    width: 95%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+}
+
+th {
+    padding: 12px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+}
+
+td {
+    padding: 12px;
+    background: rgba(255,255,255,0.05);
+    color: white;
+}
+
+tr:hover td {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ===== STATUS ===== */
+.status {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+.status.Ongoing { background: orange; }
+.status.Completed { background: green; }
+.status.Cancelled { background: red; }
+
+/* ===== BILL BUTTON ===== */
+.bill-btn {
+    padding: 6px 12px;
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
+
+    .menu {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rent Car</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #42275a, #734b6d);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 15px;
+            width: 360px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            color: white;
+            font-size: 14px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #ff512f;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .price-box {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+        }
+
+        .back {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">🚗 Rent a Car</div>
+
+<div class="container">
+    <form method="POST" action="/rent_car" onsubmit="return validateForm()">
+
+        <div class="form-group">
+            <label>Select Customer</label>
+            <select name="customer_id" required>
+                <option value="">Select Customer</option>
+                {% for c in customers %}
+                <option value="{{c.customer_id}}">{{c.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Select Car</label>
+            <select name="car_id" id="carSelect" required>
+                <option value="">Select Car</option>
+                {% for car in cars %}
+                <option value="{{car.car_id}}" data-price="{{car.price_per_day}}">
+                    {{car.model}} (₹{{car.price_per_day}}/day)
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Start Date</label>
+            <input type="date" name="start" id="startDate" required>
+        </div>
+
+        <div class="form-group">
+            <label>End Date</label>
+            <input type="date" name="end" id="endDate" required>
+        </div>
+
+        <div class="price-box" id="priceBox">
+            Total Price: ₹0
+        </div>
+
+        <button type="submit" id="rentBtn">Rent Now</button>
+    </form>
+
+    <a href="/" class="back">⬅ Back</a>
+</div>
+
+<script>
+const carSelect = document.getElementById("carSelect");
+const startDate = document.getElementById("startDate");
+const endDate = document.getElementById("endDate");
+const priceBox = document.getElementById("priceBox");
+
+function calculatePrice() {
+    let selectedCar = carSelect.options[carSelect.selectedIndex];
+    let price = selectedCar.getAttribute("data-price");
+
+    let start = new Date(startDate.value);
+    let end = new Date(endDate.value);
+
+    if (price && startDate.value && endDate.value && end >= start) {
+        let days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+        let total = days * price;
+        priceBox.innerHTML = "Total Price: ₹" + total + " (" + days + " days)";
+    } else {
+        priceBox.innerHTML = "Total Price: ₹0";
+    }
+}
+
+// VALIDATION
+function validateForm() {
+    let start = new Date(startDate.value);
+    let end = new Date(endDate.value);
+    let today = new Date();
+
+    today.setHours(0,0,0,0);
+
+    if (start < today) {
+        alert("Start date cannot be in past!");
+        return false;
+    }
+
+    if (end < start) {
+        alert("End date must be after start date!");
+        return false;
+    }
+
+    document.getElementById("rentBtn").innerText = "Processing...";
+    return true;
+}
+
+carSelect.addEventListener("change", calculatePrice);
+startDate.addEventListener("change", calculatePrice);
+endDate.addEventListener("change", calculatePrice);
+</script>
+
+</body>
+</html>
